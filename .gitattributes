@@ -1,0 +1,15 @@
+# Auto detect text files and perform LF normalization
+* text=auto
+
+# Application Source files
+*.ts text eol=lf
+*.tsx text eol=lf
+*.js text eol=lf
+*.jsx text eol=lf
+*.map text eol=lf
+*.json text eol=lf
+*.html text eol=lf
+*.css text eol=lf
+*.less text eol=lf
+*.scss text eol=lf
+*.sass text eol=lf

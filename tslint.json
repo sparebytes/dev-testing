@@ -1,0 +1,14 @@
+{
+    "rules": {
+        "no-floating-promises": [
+            true,
+            "BlueBird"
+        ],
+        "prefer-const": true,
+        "no-const_assign": true,
+        "no-var": true,
+        "no-new-object": true,
+        "object-shorthand": true,
+        "no-array-constructor": true
+    }
+}

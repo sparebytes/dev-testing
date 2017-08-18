@@ -1,0 +1,23 @@
+{
+    "files.exclude": {
+        "**/*.js.map": true,
+        "**/*.js": {
+            "when": "$(basename).ts"
+        },
+        "src/app/**/*.d.ts": true,
+        "src/lib/**/*.d.ts": true,
+        "src/__tests__/**/*.d.ts": true
+    },
+    "search.exclude": {
+        "node_modules": true,
+        "dist": true,
+        "**/*.js.map": true,
+        "**/*.js": {
+            "when": "$(basename).ts"
+        },
+        "src/app/**/*.d.ts": true,
+        "src/lib/**/*.d.ts": true,
+        "src/__tests__/**/*.d.ts": true
+    },
+    "typescript.tsdk": "./node_modules/typescript/lib"
+}

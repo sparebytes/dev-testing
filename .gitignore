@@ -1,0 +1,21 @@
+# KEEP THESE
+!/index.js
+!/index.d.ts
+!/start.js
+!/version-check.js
+
+# Local Config
+/config/local.*
+/**/config/local.*
+
+# BUILD
+/dist
+/src/**/*.js
+/src/**/*.js.map
+/src/app/**/*.d.ts
+/src/lib/**/*.d.ts
+/src/node_modules/**/*.d.ts
+/src/__tests__/**/*.d.ts
+
+# Node Modules
+/node_modules

@@ -1,0 +1,37 @@
+{
+  "name": "dev-testing",
+  "version": "0.5.0",
+  "private": false,
+  "license": "ISC",
+  "scripts": {
+    "build": "yarn run clean && tsc",
+    "build:watch": "tsc -w",
+    "clean": "rimraf dist src/**/*.js src/**/*.js.map src/app/**/*.d.ts src/lib/**/*.d.ts src/node_modules/**/*.d.ts src/__tests__/**/*.d.ts",
+    "lint": "tslint --type-check -c tslint.json -p tsconfig.json",
+    "code-format": "tsfmt -r",
+    "test": "jest",
+    "test:debug": "node --debug-brk ./node_modules/.bin/jest --runInBand"
+  },
+  "dependencies": {
+    "@types/debug": "^0.0.29",
+    "@types/mkpath": "^0.1.29",
+    "@types/node": "^6.0.85",
+    "debug": "^2.6.3",
+    "mkpath": "^1.0.0",
+    "moment": "^2.17.1"
+  },
+  "devDependencies": {
+    "@types/jest": "^20.0.2",
+    "jest": "^20.0.4",
+    "rimraf": "^2.6.1",
+    "typescript": "2.4.x",
+    "typescript-formatter": "^5.2.0"
+  },
+  "jest": {
+    "testPathIgnorePatterns": [
+      "<rootDir>/node_modules",
+      "\\.ignore\\.js",
+      "/ignore/"
+    ]
+  }
+}
