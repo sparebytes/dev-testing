@@ -3,8 +3,8 @@
 // Leave it as-is
 //
 
-const gbl = global as any;
-gbl.handleOnlyMyTestMarkedExecutions = {};
+const g = global as any;
+g.handleOnlyMyTestMarkedExecutions = {};
 
 describe('MatchedDescribe', () => {
     markExecution("MatchedDescribe");
@@ -17,11 +17,13 @@ describe('UnmatchedDescribe', () => {
 });
 
 function markExecution(name: string) {
-    if (gbl.handleOnlyMyTestMarkedExecutions == null) {
-        gbl.handleOnlyMyTestMarkedExecutions = {};
+    if (g.handleOnlyMyTestMarkedExecutions == null) {
+        g.handleOnlyMyTestMarkedExecutions = {};
     }
-    if (gbl.handleOnlyMyTestMarkedExecutions[name] == null) {
-        gbl.handleOnlyMyTestMarkedExecutions[name] = 0;
+    if (g.handleOnlyMyTestMarkedExecutions[name] == null) {
+        g.handleOnlyMyTestMarkedExecutions[name] = 0;
     }
-    gbl.handleOnlyMyTestMarkedExecutions[name]++;
+    g.handleOnlyMyTestMarkedExecutions[name]++;
 }
+
+export {};
