@@ -1,10 +1,10 @@
-import * as util from 'util';
+import * as _debug from 'debug';
 import * as fs from 'fs';
+import * as mkpath from 'mkpath';
+import * as moment from 'moment';
 import * as os from 'os';
 import * as path from 'path';
-import * as moment from 'moment';
-import * as mkpath from 'mkpath';
-import * as _debug from 'debug';
+import * as util from 'util';
 
 import * as constants from './constants';
 const debug = _debug(constants.moduleName);
@@ -18,17 +18,17 @@ export class UtilTest {
     protected mkdirpPromise: Promise<void>;
     protected outputFolderPath: string;
 
-    constructor(tmpConfig?: UtilTestConfig|null) {
+    public constructor(tmpConfig?: UtilTestConfig | null) {
         if (tmpConfig == null) {
             this.outputFolderPath = generateTmpFolderPath();
             this.config = {
-                output: { folderPath: this.outputFolderPath }
-            }
+                output: { folderPath: this.outputFolderPath },
+            };
             debug("No configuration provided. Generating config. %j", this.config);
         }
         else {
             this.config = tmpConfig;
-            let tOutputFolderPath = this.config.output && this.config.output.folderPath;
+            const tOutputFolderPath = this.config.output && this.config.output.folderPath;
             if (tOutputFolderPath == null) {
                 this.outputFolderPath = generateTmpFolderPath(this.config.output && this.config.output.preFolderName);
             }
@@ -57,7 +57,10 @@ export class UtilTest {
         }
     }
 
-    output(name: string, data: any): Promise<string|null> {
+    public async output(name: string, data: any): Promise<string | null> {
+        let filePath: string;
+        let dataFormatted: string | Buffer;
+
         try {
             if (this.outputFolderPath == null) return Promise.resolve(null);
 
@@ -66,9 +69,8 @@ export class UtilTest {
             const nowStr = now.format(nowFormat);
 
             const fileName = `${nowStr}_${name}`;
-            const filePath = path.join(this.outputFolderPath, fileName);
+            filePath = path.join(this.outputFolderPath, fileName);
 
-            let dataFormatted: string|Buffer;
             let dataType: string;
             if (typeof data === "string") {
                 dataType = "string";
@@ -84,41 +86,43 @@ export class UtilTest {
             }
 
             debug("Outputting %s of length %s to %s", dataType, dataFormatted.length, filePath);
-            return this.mkdirpPromise.then(() => {
-                return new Promise<string|null>((s,f) => {
-                    fs.writeFile(filePath, dataFormatted, (err) => {
-                        if (err) {
-                            console.error("UtilTest.output(): Error while writing file!", err);
-                            f(err);
-                        }
-                        else {
-                            s(filePath);
-                        }
-                    });
-                });
-            });
+            await this.mkdirpPromise;
         }
         catch (err) {
             console.error("UtilTest.output(): Unexpected error!", err);
-            return Promise.reject(err);
+            throw err;
         }
+
+        await new Promise<string | null>((s, f) => {
+            fs.writeFile(filePath, dataFormatted, (err) => {
+                if (err) {
+                    console.error("UtilTest.output(): Error while writing file!", err);
+                    f(err);
+                }
+                else {
+                    s(filePath);
+                }
+            });
+        });
+
+        return filePath;
     }
 
-    static instanceMaker(config: UtilTestConfig): () => UtilTest {
-        let utInstance: UtilTest|undefined = undefined;
+    public static instanceMaker(config: UtilTestConfig): () => UtilTest {
+        let utInstance: UtilTest | undefined;
         return () => {
             if (utInstance == null) {
                 utInstance = new UtilTest(config);
             }
             return utInstance;
-        }
+        };
     }
 
 }
 
 function generateTmpFolderPath(preFolder?: string): string {
-    let now = moment(new Date());
-    let nowFormatted = now.format("YYYY-MM-DD_HHmmss");
+    const now = moment(new Date());
+    const nowFormatted = now.format("YYYY-MM-DD_HHmmss");
     let result = path.join(os.tmpdir(), constants.tempFolder);
     if (preFolder != null) {
         result = path.resolve(result, preFolder);

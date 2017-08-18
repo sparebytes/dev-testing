@@ -12,9 +12,9 @@ import { testDescribeOverride } from "./test-describe-override";
  * @param afterRequireCallback A callback that executes after the test file is required. If breakpoints aren't recognized by your IDE, your IDE may need more time to initialize them.
  * @param force Force it even if the "ONLY_MY_TESTS" environment variable isn't set
  */
-export function handleOnlyMyTest(relativePath: string, jasmineTimeout: null|number, testPath: string[], delayBeforeStart: number = 500, afterRequireCallback?: () => void, force: boolean = false) {
+export function handleOnlyMyTest(relativePath: string, jasmineTimeout: null | number, testPath: string[], delayBeforeStart: number = 500, afterRequireCallback?: () => void, force: boolean = false) {
     if (!force && process.env['ONLY_MY_TESTS'] !== "true") {
-        test("Nothing to do", () => {});
+        test("Nothing to do", () => { });
         return;
     }
 
@@ -22,7 +22,7 @@ export function handleOnlyMyTest(relativePath: string, jasmineTimeout: null|numb
         (jasmine as any).DEFAULT_TIMEOUT_INTERVAL = jasmineTimeout;
     }
 
-    let fileName = testPath.splice(0, 1)[0];
+    const fileName = testPath.splice(0, 1)[0];
     let filePath = path.resolve(relativePath, fileName);
 
     let testName: string;
@@ -39,11 +39,11 @@ export function handleOnlyMyTest(relativePath: string, jasmineTimeout: null|numb
 
     if (filePath[1] === ":") { // Fix Windows issue where drive letter is not capitalized
         filePath = filePath[0].toUpperCase() + filePath.substr(1);
-    };
+    }
 
     const g: any = global;
-    let originals = { describe: g.describe, test: g.test };
-    let impl = originals;
+    const originals = { describe: g.describe, test: g.test };
+    const impl = originals;
     let runTestsBackup: () => void = () => undefined;
     if (impl.describe == null && impl.test == null) {
         const overrides = testDescribeOverride();
@@ -58,7 +58,7 @@ export function handleOnlyMyTest(relativePath: string, jasmineTimeout: null|numb
         runTestsBackup = async () => {
             for (const test of tests) {
                 console.log(`Running test : ${fileName} : ${test.name}`);
-                let result = test.callback();
+                const result = test.callback();
                 if (typeof result.then === "function") {
                     await result;
                 }
@@ -71,11 +71,11 @@ export function handleOnlyMyTest(relativePath: string, jasmineTimeout: null|numb
         };
         impl.test = async (name: string, callback: () => any) => {
             name = describeStack.join(" - ") + name;
-            tests.push({ name: name, callback: callback });
-        }
+            tests.push({ name, callback });
+        };
     }
 
-    let replacements = testFilter(impl.describe, impl.test, testPath, testName, delayBeforeStart);
+    const replacements = testFilter(impl.describe, impl.test, testPath, testName, delayBeforeStart);
     Object.assign(global, replacements);
     require(filePath);
     if (afterRequireCallback != null) {
@@ -85,13 +85,13 @@ export function handleOnlyMyTest(relativePath: string, jasmineTimeout: null|numb
     Object.assign(global, originals);
 }
 
-function testFilter(realDescribe: j.Describe, realTest: j.It, descriptionNames: string[], testName: string|null|undefined, delayBeforeStart: number = 0): { describe: j.Describe, test: j.It } {
+function testFilter(realDescribe: j.Describe, realTest: j.It, descriptionNames: string[], testName: string | null | undefined, delayBeforeStart: number = 0): { describe: j.Describe, test: j.It } {
     let hasRunOnce = (delayBeforeStart <= 0);
-    const noDelayRunner = (done: undefined|j.DoneCallback, cb: j.ProvidesCallback) => {
+    const noDelayRunner = (done: undefined | j.DoneCallback, cb: j.ProvidesCallback) => {
         hasRunOnce = true;
         return cb(done as any);
-    }
-    const delayRunner = (done: undefined|j.DoneCallback, cb: j.ProvidesCallback): any => {
+    };
+    const delayRunner = (done: undefined | j.DoneCallback, cb: j.ProvidesCallback): any => {
         if (cb == null) {
             throw Error("Expected Test Callback to not be null.");
         }
@@ -102,7 +102,7 @@ function testFilter(realDescribe: j.Describe, realTest: j.It, descriptionNames: 
         else {
             return new Promise(resolve => setTimeout(resolve, delayBeforeStart)).then(() => noDelayRunner(done, cb));
         }
-    }
+    };
 
     function onceDelayRunner(cb: j.ProvidesCallback): any {
         if (cb.length > 0) {
@@ -114,7 +114,7 @@ function testFilter(realDescribe: j.Describe, realTest: j.It, descriptionNames: 
                     hasRunOnce = true;
                     return delayRunner(done, cb);
                 }
-            }
+            };
         }
         else {
             return () => {
@@ -125,30 +125,30 @@ function testFilter(realDescribe: j.Describe, realTest: j.It, descriptionNames: 
                     hasRunOnce = true;
                     return delayRunner(undefined as any, cb);
                 }
-            }
+            };
         }
     }
 
-    let matchesStack: boolean[] = [];
+    const matchesStack: boolean[] = [];
 
-    let matchAnyDescription = (descriptionNames.length === 1 && descriptionNames[0] === "*");
+    const matchAnyDescription = (descriptionNames.length === 1 && descriptionNames[0] === "*");
 
-    let _describe = (name: string, fn: j.EmptyFunction) => {
-        let relevantDescriptionName = descriptionNames[matchesStack.length];
-        let matches = (matchAnyDescription || relevantDescriptionName === "*" || name === relevantDescriptionName);
+    const _describe = (name: string, fn: j.EmptyFunction) => {
+        const relevantDescriptionName = descriptionNames[matchesStack.length];
+        const matches = (matchAnyDescription || relevantDescriptionName === "*" || name === relevantDescriptionName);
         matchesStack.push(matches);
         if (matches) {
             realDescribe(name, fn);
         }
         matchesStack.pop();
     };
-    let describe: j.Describe = _describe as any;
+    const describe: j.Describe = _describe as any;
     describe.only = describe;
     describe.skip = describe;
 
-    let _test = (name: string, fn?: j.ProvidesCallback) => {
-        let matchesName = (testName === "*" || testName === name);
-        let matchesDescription = (matchAnyDescription || (matchesStack.length === 0 && descriptionNames.length === 0) || (matchesStack.length > 0 && matchesStack.every(z => z)));
+    const _test = (name: string, fn?: j.ProvidesCallback) => {
+        const matchesName = (testName === "*" || testName === name);
+        const matchesDescription = (matchAnyDescription || (matchesStack.length === 0 && descriptionNames.length === 0) || (matchesStack.length > 0 && matchesStack.every(z => z)));
         if (matchesName && matchesDescription) {
             if (fn == null) {
                 throw Error("Function is null");
@@ -160,7 +160,7 @@ function testFilter(realDescribe: j.Describe, realTest: j.It, descriptionNames: 
         }
     };
 
-    let test: j.It = _test as any;
+    const test: j.It = _test as any;
     test.only = test;
     test.skip = test;
     test.concurrent = test;
@@ -180,12 +180,12 @@ namespace j {
     }
 
     export interface DoneCallback {
-        (...args: any[]): any
+        (...args: any[]): any;
         fail(error?: string | { message: string }): any;
     }
 
     export interface Describe {
-        (name: string, fn: EmptyFunction): void
+        (name: string, fn: EmptyFunction): void;
         only: Describe;
         skip: Describe;
     }
@@ -219,5 +219,5 @@ export function startOnlyMyTests() {
     g.describe = () => { };
     return () => {
         Object.assign(g, originals);
-    }
+    };
 }

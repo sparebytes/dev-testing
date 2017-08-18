@@ -1,6 +1,6 @@
 {
   "name": "dev-testing",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "private": false,
   "license": "ISC",
   "scripts": {
@@ -8,7 +8,8 @@
     "build:watch": "tsc -w",
     "clean": "rimraf dist src/**/*.js src/**/*.js.map src/app/**/*.d.ts src/lib/**/*.d.ts src/node_modules/**/*.d.ts src/__tests__/**/*.d.ts",
     "lint": "tslint --type-check -c tslint.json -p tsconfig.json",
-    "code-format": "tsfmt -r",
+    "lint:fix": "yarn run lint -- --fix",
+    "code-format": "tsfmt -r && yarn run lint:fix",
     "test": "jest",
     "test:debug": "node --debug-brk ./node_modules/.bin/jest --runInBand"
   },
@@ -24,6 +25,7 @@
     "@types/jest": "^19.2.4",
     "jest": "^19.0.2",
     "rimraf": "^2.6.1",
+    "tslint": "^5.6.0",
     "typescript": "2.4.x",
     "typescript-formatter": "^5.2.0"
   },

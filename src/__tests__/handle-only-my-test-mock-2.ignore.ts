@@ -11,7 +11,7 @@ describe('MatchedDescribe', () => {
     test('MatchedTest', () => {
         g.handeOnlyMyTestFirstExecutionDate = g.handeOnlyMyTestFirstExecutionDate || new Date();
         g.handeOnlyMyTestDeferred.resolve(undefined);
-        markExecution("MatchedTest")
+        markExecution("MatchedTest");
     });
 });
 
@@ -30,4 +30,4 @@ function markExecution(name: string) {
     g.handleOnlyMyTestMarkedExecutions[name]++;
 }
 
-export {};
+export { };

@@ -26,4 +26,4 @@ function markExecution(name: string) {
     g.handleOnlyMyTestMarkedExecutions[name]++;
 }
 
-export {};
+export { };

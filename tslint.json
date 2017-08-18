@@ -1,14 +1,67 @@
 {
     "rules": {
-        "no-floating-promises": [
+        // Going Overboard?
+        "ordered-imports": true,
+        "prefer-function-over-method": false, // non-static methods inside of classes must refer to this
+
+        // Variables
+        "no-var-keyword": true,
+        "prefer-const": true, //
+
+        // Control Structures
+        "prefer-for-of": true,
+
+        // Code Style and Readability
+        "curly": [true, "ignore-same-line"],
+        "object-literal-shorthand": true,
+        "adjacent-overload-signatures": true,
+        "trailing-comma": [
             true,
-            "BlueBird"
+            {
+                "multiline": "always",
+                "singleline": "ignore"
+            }
         ],
-        "prefer-const": true,
-        "no-const_assign": true,
-        "no-var": true,
-        "no-new-object": true,
-        "object-shorthand": true,
-        "no-array-constructor": true
+        "align": [true, "parameters", "arguments", "statements", "members", "elements"],
+        "array-type": [true, "array"],
+        "arrow-return-shorthand": true,
+        "prefer-method-signature": true,
+
+        // Maintainability
+        "deprecation": true,
+        "no-duplicate-imports": true,
+        "jsdoc-format": true,
+        "new-parens": true,
+        "no-angle-bracket-type-assertion": true,
+        "no-unnecessary-initializer": true,
+        "number-literal-format": true, // decimal numbers start with 0.x
+        "one-line": [true, "check-open-brace"],
+        "semicolon": [true, "always"],
+        "switch-final-break": [true, "always"],
+
+        // Classes
+        "member-access": [true, "check-accessor", "check-constructor"],
+
+        // Async and Promises
+        "await-promise": [true, "Thenable"], // Warns for an awaited value that is not a Promise.
+        "no-floating-promises": [true, "BlueBird", "Q.Promise", "Thenable"], // Promises that aren't awaited or returned are usually a mistake.
+        "promise-function-async": true, // All functions that return a promise should be marked async.
+
+        // Avoid Accidents and Bad Programming
+        "no-shadowed-variable": true,
+        "no-conditional-assignment": true,
+        "no-bitwise": true,
+        "no-arg": true,
+        "no-duplicate-super": true,
+        "no-eval": true,
+        "no-sparse-arrays": true,
+        "no-switch-case-fall-through": true,
+        "no-unsafe-finally": true,
+        "no-unused-expression": [true, "allow-new", "allow-tagged-template"],
+        "no-unused-variable": true,
+        "prefer-object-spread": true,
+        "switch-default": true,
+        "typeof-compare": true,
+        "use-isnan": true
     }
 }

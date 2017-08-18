@@ -10,22 +10,22 @@ export function getTestDescribe() {
     const tests: { name: string; callback: any }[] = [];
     const describeStack: string[] = [];
     async function runTestsBackup() {
-        for (const test of tests) {
-            console.log(`Running test : ${test.name}`);
-            let result = test.callback();
+        for (const testC of tests) {
+            console.log(`Running test : ${testC.name}`);
+            const result = testC.callback();
             if (typeof result.then === "function") {
                 await result;
             }
-            console.log(`Done test : ${test.name}`);
+            console.log(`Done test : ${testC.name}`);
         }
-    };
+    }
     function describe(name: string, callback: () => any): void {
         describeStack.push(name);
         callback();
-    };
+    }
     function test(name: string, callback: () => any): void {
         name = describeStack.join(" - ") + name;
-        tests.push({ name: name, callback: callback });
+        tests.push({ name, callback });
     }
 
     return { describe, test, runTestsBackup };

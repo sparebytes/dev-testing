@@ -12,15 +12,15 @@ test('handleOnlyMyTest instant', () => {
     g.test = (name: string, callback: () => string) => {
         testCallCount++;
         callback();
-    }
+    };
     g.describe = (name: string, callback: () => string) => {
         describeCallCount++;
         callback();
-    }
+    };
 
     handleOnlyMyTest(__dirname, null, ["./handle-only-my-test-mock-1.ignore", "MatchedDescribe", "MatchedTest"], 0, () => {
         postRequireCallCount++;
-    }, true);
+    },               true);
 
     expect(testCallCount).toEqual(1);
     expect(describeCallCount).toEqual(1);
@@ -51,12 +51,12 @@ test('handleOnlyMyTest delayed', async () => {
     g.test = (name: string, callback: () => string) => {
         testCallCount++;
         callback();
-    }
+    };
     g.describe = (name: string, callback: () => string) => {
         describeCallCount++;
         callback();
         describeDeferred.resolve(undefined);
-    }
+    };
 
     const tooLate = new Promise((resolve, reject) => setTimeout(() => reject("Took too long!"), maxDelayTime));
 
@@ -64,14 +64,14 @@ test('handleOnlyMyTest delayed', async () => {
 
     handleOnlyMyTest(__dirname, null, ["./handle-only-my-test-mock-2.ignore", "MatchedDescribe", "MatchedTest"], 500, () => {
         postRequireCallCount++;
-    }, true);
+    },               true);
 
     await Promise.race([
         tooLate,
         Promise.all([
             g.handeOnlyMyTestDeferred.promise,
             describeDeferred.promise,
-        ])
+        ]),
     ]);
 
 
